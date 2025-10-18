@@ -2,17 +2,18 @@ import tkinter as tk
 from tkinter import *
 
 def juego():
-    ventana_principal.withdraw()
+    #ventana_principal.withdraw()
     ventana_juego = tk.Toplevel() 
     ventana_juego.title("Juego") 
     ventana_principal.config(bg="lightblue")
 
     ancho_ventana =  ventana_juego.winfo_screenwidth() 
     alto_ventana = ventana_juego.winfo_screenheight()
+
     ventana_juego.geometry(f"{ancho_ventana}x{alto_ventana}")
 
-    ancho_canvas = (ventana_juego*0.8) // 100
-    alto_canvas = (ventana_juego*0.8) // 100
+    ancho_canvas = int(ancho_ventana * 0.7) // 40 * 40
+    alto_canvas = int(alto_ventana * 0.7) // 40 * 40
 
     canvas_juego = Canvas(ventana_juego, width=ancho_canvas, height=alto_canvas, bg="black")
     canvas_juego.pack()
