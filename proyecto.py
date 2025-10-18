@@ -71,20 +71,20 @@ def mover_jugador(can, event, velocidad, ancho_canvas, alto_canvas):
 
 def fuera_pantalla(can, objeto, ancho, alto):
     x1, y1, x2, y2 = can.coords(objeto)
-    ancho_obj = x2 - x1
-    alto_obj = y2 - y1
+    ancho_objeto = x2 - x1
+    alto_objeto = y2 - y1
 
     if x2 < 0:
-        can.coords(objeto, ancho - ancho_obj, y1, ancho, y2)
+        can.coords(objeto, ancho - ancho_objeto, y1, ancho, y2)
 
     elif x1 > ancho:
-        can.coords(objeto, 0, y1, ancho_obj, y2)
+        can.coords(objeto, 0, y1, ancho_objeto, y2)
 
     elif y2 < 0:
-        can.coords(objeto, x1, alto - alto_obj, x2, alto)
+        can.coords(objeto, x1, alto - alto_objeto, x2, alto)
 
     elif y1 > alto:
-        can.coords(objeto, x1, 0, x2, alto_obj)
+        can.coords(objeto, x1, 0, x2, alto_objeto)
 
 
 #Ventana Principal
