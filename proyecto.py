@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import *
-<<<<<<< HEAD
 import random
-=======
 import os
 from PIL import Image, ImageTk
 
@@ -15,7 +13,6 @@ def Carga_de_Imagenes_Escaladas(nombre, px1, px2):
     imagen_final = ImageTk.PhotoImage(imagen_escalada) 
     
     return imagen_final
->>>>>>> 52051763ddc0e6db9761b1b817a66c1ee16b1213
 
 def juego():
     #ventana_principal.withdraw()
@@ -27,7 +24,6 @@ def juego():
 
     ventana_juego.geometry(f"{ancho_ventana}x{alto_ventana}")
 
-<<<<<<< HEAD
     ancho_can = int(ancho_ventana * 0.8) // 40 * 40
     alto_can = int(alto_ventana * 0.8) // 40 * 40
 
@@ -36,7 +32,6 @@ def juego():
 
     can_juego = Canvas(ventana_juego, width=ancho_can, height=alto_can, bg="black")
     can_juego.pack()
-=======
     imagen = Carga_de_Imagenes_Escaladas("fondo_juego.png", ancho_ventana, alto_ventana)
     Imagen_fondo_juego = Label(ventana_juego, image = imagen) #Crea una etiqueta con la imagen de fondo
     Imagen_fondo_juego.place(x=0, y=0, relwidth=1, relheight=1) #posiciona la imagen de fondo en la ventana
@@ -48,7 +43,6 @@ def juego():
 
     canvas_juego = Canvas(ventana_juego, width=ancho_canvas, height=alto_canvas, bg="black")
     canvas_juego.pack()
->>>>>>> 52051763ddc0e6db9761b1b817a66c1ee16b1213
 
     #Cargar imagenes moto rosa
     imagen_rosa1 = Carga_de_Imagenes_Escaladas("rosa1.png", 40, 40)
