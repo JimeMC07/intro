@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 
 
 def Carga_de_Imagenes_Escaladas(nombre, px1, px2):
-    ruta = os.path.join(r'C:\Users\Jimen\Desktop\TEC\Segundo Semestre\Intro 2\proyecto intro\intro\imagenes', nombre)
+    ruta = os.path.join(r'C:\Users\ricar\Desktop\Proyecto Intro Jimena\intro\imagenes', nombre)
     
     imagen_original = Image.open(ruta)  
     imagen_escalada = imagen_original.resize((px1, px2), Image.Resampling.LANCZOS)  
@@ -24,6 +24,7 @@ def juego():
 
     ventana_juego.geometry(f"{ancho_ventana}x{alto_ventana}")
 
+<<<<<<< HEAD
     ancho_can = int(ancho_ventana * 0.8) // 40 * 40
     alto_can = int(alto_ventana * 0.8) // 40 * 40
 
@@ -32,6 +33,8 @@ def juego():
 
     can_juego = Canvas(ventana_juego, width=ancho_can, height=alto_can, bg="black")
     can_juego.pack()
+=======
+>>>>>>> 36b0acabd53e794e02ed2787f468645f4049c86e
     imagen = Carga_de_Imagenes_Escaladas("fondo_juego.png", ancho_ventana, alto_ventana)
     Imagen_fondo_juego = Label(ventana_juego, image = imagen) #Crea una etiqueta con la imagen de fondo
     Imagen_fondo_juego.place(x=0, y=0, relwidth=1, relheight=1) #posiciona la imagen de fondo en la ventana
@@ -68,9 +71,9 @@ def juego():
     imagen_verde3 = Carga_de_Imagenes_Escaladas("verde3.png", 40, 40)
     canvas_juego.imagen_verde3 = imagen_verde3
     
-    can_juego.jugador = crear_personaje(can_juego, 640, 360)
-    can_juego.bind_all("<KeyPress>", lambda event: mover_jugador(can_juego, event, 20, ancho_can, alto_can))
-    can_juego.ultima_direccion = "arriba"
+    canvas_juego.jugador = crear_personaje(canvas_juego, 640, 360, imagen_azul1)
+    canvas_juego.bind_all("<KeyPress>", lambda event: mover_jugador(canvas_juego, event, 20, ancho_canvas, alto_canvas))
+    canvas_juego.ultima_direccion = "arriba"
 
 
 #Ventana apariencia
@@ -98,9 +101,8 @@ def ventana_apariencia():
 
 #Crear Personaje
 ######################################################################
-def crear_personaje(can, x, y):
-    return can.create_oval(10, 10, 60, 60, fill="skyblue", outline="black", width=2)
-    #return can.create_image(x, y)
+def crear_personaje(can, x, y, moto):
+    return can.create_image(x, y, image=moto)
 
 
 #Mover Jugador
@@ -124,8 +126,6 @@ def mover_jugador(can, event, velocidad, ancho_can, alto_can):
     elif event.keysym == 's':
         movimiento_y = velocidad
         can.ultima_direccion = "abajo"
-
-    x1, y1, x2, y2 = can.coords(can.jugador)
     
     """nx = x + movimiento_x
     ny = y + movimiento_y"""
@@ -137,21 +137,37 @@ def mover_jugador(can, event, velocidad, ancho_can, alto_can):
 #Función para detectar que salió fuera de la pantalla el jugador
 #############################################################################
 def fuera_pantalla(can, objeto, ancho, alto):
-    x1, y1, x2, y2 = can.coords(objeto)
-    ancho_objeto = x2 - x1
-    alto_objeto = y2 - y1
+    x, y = can.coords(objeto)
+    
+    bbox = can.bbox(objeto)
 
-    if x2 < 0:
-        can.coords(objeto, ancho - ancho_objeto, y1, ancho, y2)
+    if bbox:
+        x1, y1, x2, y2 = bbox
+        mitad_ancho = (x2 - x1) / 2
+        mitad_alto = (y2 - y1) / 2
+    else:
+        mitad_ancho = 20
+        mitad_alto = 20
+        
+    nueva_x = x
+    nueva_y = y
+    
 
-    elif x1 > ancho:
-        can.coords(objeto, 0, y1, ancho_objeto, y2)
+    if x + mitad_ancho < 0:  
+        nueva_x = ancho + mitad_ancho 
+        
+    elif x - mitad_ancho > ancho:  
+        nueva_x = -mitad_ancho  
+    
 
-    elif y2 < 0:
-        can.coords(objeto, x1, alto - alto_objeto, x2, alto)
-
-    elif y1 > alto:
-        can.coords(objeto, x1, 0, x2, alto_objeto)
+    if y + mitad_alto < 0:  
+        nueva_y = alto + mitad_alto 
+        
+    elif y - mitad_alto > alto: 
+        nueva_y = -mitad_alto  
+    
+    if nueva_x != x or nueva_y != y:
+        can.coords(objeto, nueva_x, nueva_y)
 
 
 #Función para crear a los personajes
@@ -161,7 +177,7 @@ def crear_enemigos(can, nivel):
     x = random.randint(40, 1160)
     y = random.randint(40, 640)
 
-    if nivel == 1:
+    if nivel == 1:  
         imagen = can.imagen_rosa1
         velocidad = 5
     elif nivel == 2:
@@ -193,27 +209,11 @@ def crear_enemigos(can, nivel):
     can.move(moto_3, x, y)
 
 
-    pos_moto1 = can.coords(bola_roja)
-    pos_moto2 = can.coords(bola_azul)
+    pos_moto1 = can.coords(moto_1)
+    pos_moto2 = can.coords(moto_2)
+    pos_moto3 = can.coords(moto_3)
 
-    #Valorar si las esferas rebotan en los bordes
-
-    #Bola Roja
-    if pos_moto1[3] >= 300 or pos_moto1[1] <= 0:
-        ventana.vel_rojo[1] = -ventana.vel_rojo[1]
-
-    if pos_moto1[2] >= 400 or pos_moto1[0] <= 0:
-        ventana.vel_rojo[0] = -ventana.vel_rojo[0]
-
-
-    #Bola azul
-    if pos_moto2[3] >= 300 or pos_moto2[1] <= 0:
-        ventana.vel_azul[1] = -ventana.vel_azul[1]
-        
-    if pos_moto2[2] >= 400 or pos_moto2[0] <= 0:
-        ventana.vel_azul[0] = -ventana.vel_azul[0]
-
-
+    
     #Valorar si las esferas rebotan entre ellas
 
     if (pos_moto1[0] < pos_moto2[2] and
@@ -221,10 +221,7 @@ def crear_enemigos(can, nivel):
         pos_moto1[1] < pos_moto2[3] and
         pos_moto1[3] > pos_moto2[1]):
 
-        ventana.vel_rojo[0] = -ventana.vel_rojo[0]
-        ventana.vel_rojo[1] = -ventana.vel_rojo[1]
-        ventana.vel_azul[0] = -ventana.vel_azul[0]
-        ventana.vel_azul[1] = -ventana.vel_azul[1]
+
 
     ventana.after(20, AnimacionRecursiva, can, bola_roja, bola_azul, ventana)"""
 
